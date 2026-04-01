@@ -1,0 +1,3 @@
+# This project relies entirely on Python's standard library. 
+# No external dependencies are required.
+# Core libraries used: json, sqlite3, csv, urllib.request
