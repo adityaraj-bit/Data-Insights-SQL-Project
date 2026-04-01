@@ -113,6 +113,47 @@ print("👉 Each company has 1 user → no company dominance.\n")
 
 print("-"*50)
 
+
+print("7️⃣ Zipcode Format Consistency:")
+
+cursor.execute("""
+SELECT 
+    LENGTH(zipcode),
+    COUNT(*)
+FROM addresses
+GROUP BY LENGTH(zipcode);
+""")
+
+for row in cursor.fetchall():
+    print(row)
+
+print("👉 Insight: Zipcodes vary in format → dataset includes mixed standards.\n")
+print("-"*50)
+
+
+
+
+print("6️⃣ Phone Format Patterns:")
+
+cursor.execute("""
+SELECT 
+    CASE 
+        WHEN phone LIKE '%(%' THEN 'Bracket Format'
+        WHEN phone LIKE '%.%' THEN 'Dot Format'
+        WHEN phone LIKE '%-%' THEN 'Dash Format'
+        ELSE 'Other'
+    END as format,
+    COUNT(*)
+FROM users
+GROUP BY format;
+""")
+
+for row in cursor.fetchall():
+    print(row)
+
+print("👉 Insight: Multiple phone formats detected → useful for testing normalization systems.\n")
+print("-"*50)
+
 # Close connection
 conn.close()
 
