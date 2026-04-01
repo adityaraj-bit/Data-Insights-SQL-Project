@@ -4,12 +4,12 @@ import sqlite3
 conn = sqlite3.connect("users.db")
 cursor = conn.cursor()
 
-print("📊 INSIGHTS FROM DATABASE\n")
+print("INSIGHTS FROM DATABASE\n")
 
 # -------------------------------
 # 1. Users per City
 # -------------------------------
-print("1️⃣ Users per City:")
+print("Users per City:")
 cursor.execute("""
 SELECT city, COUNT(*) as total_users
 FROM addresses
@@ -29,7 +29,7 @@ print("-"*50)
 # -------------------------------
 # 2. Email Domain Analysis
 # -------------------------------
-print("2️⃣ Email Domain Distribution:")
+print("Email Domain Distribution:")
 cursor.execute("""
 SELECT 
     SUBSTR(email, INSTR(email, '@') + 1) AS domain,
@@ -51,7 +51,7 @@ print("-"*50)
 # -------------------------------
 # 3. Website Type Distribution
 # -------------------------------
-print("3️⃣ Website Types:")
+print("Website Types:")
 cursor.execute("""
 SELECT 
     CASE 
@@ -77,7 +77,7 @@ print("-"*50)
 # -------------------------------
 # 4. Geographic Spread
 # -------------------------------
-print("4️⃣ Geographic Spread:")
+print("Geographic Spread:")
 cursor.execute("""
 SELECT 
     MIN(lat), MAX(lat),
@@ -97,7 +97,7 @@ print("-"*50)
 # -------------------------------
 # 5. Users per Company
 # -------------------------------
-print("5️⃣ Users per Company:")
+print("Users per Company:")
 cursor.execute("""
 SELECT name, COUNT(*) 
 FROM companies
@@ -114,7 +114,7 @@ print("👉 Each company has 1 user → no company dominance.\n")
 print("-"*50)
 
 
-print("7️⃣ Zipcode Format Consistency:")
+print("Zipcode Format Consistency:")
 
 cursor.execute("""
 SELECT 
@@ -133,7 +133,7 @@ print("-"*50)
 
 
 
-print("6️⃣ Phone Format Patterns:")
+print("Phone Format Patterns:")
 
 cursor.execute("""
 SELECT 
@@ -154,6 +154,40 @@ for row in cursor.fetchall():
 print("👉 Insight: Multiple phone formats detected → useful for testing normalization systems.\n")
 print("-"*50)
 
+
+print("Longitude Segmentation:")
+
+cursor.execute("""
+SELECT 
+    CASE 
+        WHEN lng >= 0 THEN 'Eastern'
+        ELSE 'Western'
+    END as region,
+    COUNT(*)
+FROM addresses
+GROUP BY region;
+""")
+
+rows = cursor.fetchall()
+print(rows)
+
+print("-"*50)
+
+print("Latitude Segmentation:")
+
+cursor.execute("""
+SELECT 
+    CASE 
+        WHEN lat >= 0 THEN 'Northern Hemisphere'
+        ELSE 'Southern Hemisphere'
+    END as hemisphere,
+    COUNT(*)
+FROM addresses
+GROUP BY hemisphere;
+""")
+
+rows = cursor.fetchall()
+print(rows)
 # Close connection
 conn.close()
 
